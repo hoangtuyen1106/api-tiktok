@@ -15,8 +15,8 @@ Route::get('/home', [HomeController::class, 'index']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/logged-in-user', [UserController::class, 'loggedInUser']);
-    Route::get('/update-user-image', [UserController::class, 'updateUserImage']);
-    Route::get('/update-user', [UserController::class, 'updateUser']);
+    Route::post('/update-user-image', [UserController::class, 'updateUserImage']);
+    Route::patch('/update-user', [UserController::class, 'updateUser']);
 
     Route::get('/posts/{id}', [PostController::class, 'show']);
     Route::post('/posts', [PostController::class, 'store']);
@@ -24,7 +24,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::get('/profiles/{id}', [ProfileController::class, 'show']);
 
-    Route::post('/comments/{id}', [CommentController::class, 'store']);
+    Route::post('/comments', [CommentController::class, 'store']);
     Route::delete('/comments/{id}', [CommentController::class, 'destroy']);
 
     Route::post('/likes', [LikeController::class, 'store']);

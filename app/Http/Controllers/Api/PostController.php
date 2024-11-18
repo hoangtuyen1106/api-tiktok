@@ -43,11 +43,13 @@ class PostController extends Controller
             $post = Post::where('id', $id)->get();
             $posts = Post::where('user_id', $post[0]->user_id)->get();
 
-            $ids = $posts->map(function($post) {
+            $ids = $posts->map(function ($post) {
                 return $post->id;
             });
+
             return response()->json([
-                'post' => new AllPostsCollection($post)
+                'post' => new AllPostsCollection($post),
+                'ids' => $ids
             ], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 400);

@@ -20,11 +20,15 @@ class AllPostsCollection extends ResourceCollection
                 'text' => $post->text,
                 'video' => url('/') . $post->video,
                 'created_at' => $post->created_at->format(' M D Y'),
-                'comments' => $post->comments->map(function($comment) {
+                'comments' => $post->comments->map(function ($comment) {
                     return [
                         'id' => $comment->id,
                         'text' => $comment->text,
-                        'image' => url('/'). $comment->user->image
+                        'user' => [
+                            'id' => $comment->user->id,
+                            'name' => $comment->user->name,
+                            'image' => url('/') . $comment->user->image
+                        ],
                     ];
                 }),
                 'likes' => $post->likes->map(function ($like) {

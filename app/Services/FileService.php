@@ -1,17 +1,25 @@
-<?php 
+<?php
+
 namespace App\Services;
 
-use Image;
+use Illuminate\Http\Request;
+use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Imagick\Driver;
 
 class FileService
 {
     public function updateImage($model, $request)
     {
-        $image = Image::make($request->file('image'));
-        if(!empty($model->image)) {
+        $manager = new ImageManager(new Driver());
+        $image = $manager->read($request->file('image'));
+        // $image = Image::make($request->file('image'));
+        // $image = Image::read($request->file('image'));
+
+        if (!empty($model->image)) {
             $currentImage = public_path() . $model->image;
 
-            if(file_exists($currentImage) && $currentImage != public_path() . '/user-placeholder.png') {
+            if (file_exists($currentImage) && $currentImage != public_path() . '/user-placeholder.png') {
                 unlink($currentImage);
             }
         }
@@ -19,16 +27,19 @@ class FileService
         $file = $request->file('image');
         $extension = $file->getClientOriginalExtension();
 
+        $top = !empty($request->top) ? $request->top : 0;
+        $left = !empty($request->left) ? $request->left : 0;
         $image->crop(
             $request->width,
             $request->height,
-            $request->left,
-            $request->top
+            $left,
+            $top
         );
 
-        $name = time(). '.' . $extension;
+        $name = time() . '.' . $extension;
         $image->save(public_path() . '/files/' . $name);
         $model->image = '/files/' . $name;
+
         return $model;
     }
 

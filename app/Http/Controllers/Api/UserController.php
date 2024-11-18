@@ -33,7 +33,7 @@ class UserController extends Controller
         if($request->height === '' || $request->width === '' || $request->top === '' || $request->left === '') {
             return response()->json(['error' => 'The dimesions are incomplete'], 400);
         }
-
+        
         try {
             $user = (new FileService)->updateImage(auth()->user(), $request);
             $user->save();
@@ -62,7 +62,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateUser($request)
+    public function updateUser(Request $request)
     {
         $request->validate(['name' => 'required']);
 
@@ -80,5 +80,4 @@ class UserController extends Controller
             return response()->json(['error' => $e->getMessage()], 400);
         }
     }
-
 }
